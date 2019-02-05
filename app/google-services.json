@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "407475679236",
+    "firebase_url": "https://enzogproyect.firebaseio.com",
+    "project_id": "enzogproyect",
+    "storage_bucket": "enzogproyect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407475679236:android:62a92b1a4973a22c",
+        "android_client_info": {
+          "package_name": "com.example.dami_.gymfuture"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "407475679236-9ujg200k2a2q4tv2fp5q2b0lqbb168me.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu_DgUSi90i8cEe_ETO6CGbOf8WL6zRj8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

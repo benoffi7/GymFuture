@@ -4,8 +4,9 @@ import android.arch.persistence.room.Database;
 import android.arch.persistence.room.RoomDatabase;
 
 import com.example.dami_.gymfuture.Interfaces.DaoExercise;
+import com.example.dami_.gymfuture.Model.Exercise;
 
-@Database(entities = {} , version = 1 , exportSchema = false)
+@Database(entities = {Exercise.class} , version = 1 , exportSchema = false)
 public abstract class DatabaseApp extends RoomDatabase {
     public abstract DaoExercise daoExercise();
 }
