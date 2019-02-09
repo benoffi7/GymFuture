@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "exercises")
 public class Exercise {
     @PrimaryKey @NonNull
+    @ColumnInfo(name = "id_exercise")
     private String idExercise;
     @ColumnInfo(name = "name")
     private String name;

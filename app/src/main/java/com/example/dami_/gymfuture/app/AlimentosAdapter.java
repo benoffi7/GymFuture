@@ -1,4 +1,4 @@
-package com.example.dami_.gymfuture.app;
+/*package com.example.dami_.gymfuture.app;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -15,6 +15,8 @@ import com.example.dami_.gymfuture.R;
 
 import java.util.List;
 
+*/
+/*
 public class AlimentosAdapter extends RecyclerView.Adapter<AlimentosAdapter.ListaPaisesViewHolder> {
 
     private Activity mContext;
@@ -39,7 +41,7 @@ public class AlimentosAdapter extends RecyclerView.Adapter<AlimentosAdapter.List
     @Override
     public ListaPaisesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_ejercicio, parent, false);
+                .inflate(R.layout.row_routine, parent, false);
 
         return new AlimentosAdapter.ListaPaisesViewHolder(view);
     }
@@ -80,3 +82,4 @@ public class AlimentosAdapter extends RecyclerView.Adapter<AlimentosAdapter.List
         }
     }
 }
+*/

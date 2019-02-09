@@ -12,7 +12,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.clubpreferencial.petcard.R;
+//import com.clubpreferencial.petcard.R;
 
 
 
@@ -30,7 +30,7 @@ import com.clubpreferencial.petcard.R;
             };
             dialogProducto.show(mContext.getFragmentManager(),"NoticeDialogFragment");
  */
-
+/*
 public class DialogAsignar extends DialogFragment
 {
 
@@ -168,5 +168,5 @@ public class DialogAsignar extends DialogFragment
     }
     */
 
-}
+//}
 
