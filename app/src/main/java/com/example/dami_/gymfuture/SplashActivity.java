@@ -61,8 +61,9 @@ public class SplashActivity extends AppCompatActivity
                             String key = node.getKey();
                             String name = (String) node.child("name").getValue();
                             String description = (String) node.child("description").getValue();
+                            String url_image = (String) node.child("url_image").getValue();
                             assert key != null;
-                            final Exercise exercise = new Exercise(key, name, description);
+                            final Exercise exercise = new Exercise(key, name, description,url_image);
                             exercise.setIdExercise(key);
                             new Thread(new Runnable()
                             {

@@ -14,14 +14,15 @@ public class Exercise {
     private String name;
     @ColumnInfo(name = "description")
     private String description;
+    @ColumnInfo(name = "imageUrl")
+    private String imageUrl;
 
 
-
-
-    public Exercise(@NonNull String idExercise, String name, String description) {
+    public Exercise(@NonNull String idExercise, String name, String description, String imageUrl) {
         this.idExercise = idExercise;
         this.name = name;
         this.description = description;
+        this.imageUrl = imageUrl;
     }
 
     @NonNull
@@ -47,5 +48,13 @@ public class Exercise {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

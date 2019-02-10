@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splashActivity">
+
+    <activity
+        android:id="@+id/splashActivity"
+        android:name="com.example.dami_.gymfuture.SplashActivity"
+        android:label="activity_splash"
+        tools:layout="@layout/activity_splash">
+        <action
+            android:id="@+id/action_splashActivity_to_selectObjetiveActivity"
+            app:destination="@+id/selectObjetiveActivity"
+            />
+    </activity>
+    <activity
+        android:id="@+id/selectObjetiveActivity"
+        android:name="com.example.dami_.gymfuture.SelectObjetiveActivity"
+        android:label="activity_select_objetive"
+        tools:layout="@layout/activity_select_objetive" >
+
+        <action
+            android:id="@+id/action_selectObjetiveActivity_to_mainActivity"
+            app:destination="@+id/mainActivity"
+            />
+
+    </activity>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.dami_.gymfuture.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+</navigation>

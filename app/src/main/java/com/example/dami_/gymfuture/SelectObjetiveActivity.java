@@ -18,7 +18,7 @@ import com.example.dami_.gymfuture.app.app;
 import java.util.List;
 
 public class SelectObjetiveActivity extends AppCompatActivity {
-    public static DatabaseApp databaseApp;
+    public DatabaseApp databaseApp;
     //public RoutinesAdapter adapter;
     private RadioGroup radioGroup;
     public List<Objetive> listObjetives;
