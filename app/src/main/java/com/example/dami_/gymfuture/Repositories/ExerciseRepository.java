@@ -32,6 +32,27 @@ public class ExerciseRepository {
         new insertAsyncTask(databaseApp).execute(exercise);
     }
 
+    public void deleteAll(){
+        new deleteAllAsyncTask(databaseApp).execute();
+    }
+
+    private static class deleteAllAsyncTask extends  AsyncTask<Void, Void, Void>{
+
+        private DatabaseApp db;
+
+        deleteAllAsyncTask(DatabaseApp databaseApp){
+            db = databaseApp;
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            db.exerciseDao().truncateTable();
+            return null;
+        }
+
+    }
+
     private static class insertAsyncTask extends  AsyncTask<Exercise, Void, Void>{
 
         private DatabaseApp db;

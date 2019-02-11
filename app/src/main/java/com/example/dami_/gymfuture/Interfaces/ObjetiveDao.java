@@ -1,5 +1,6 @@
 package com.example.dami_.gymfuture.Interfaces;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -13,7 +14,7 @@ import java.util.List;
 @Dao
 public interface ObjetiveDao {
     @Insert
-    void add(Objetive... objetives);
+    void insert(Objetive... objetives);
 
     @Update
     void update(Objetive... objetives);
@@ -25,7 +26,7 @@ public interface ObjetiveDao {
     void truncateTable();
 
     @Query("SELECT * FROM objetives")
-    List<Objetive> getAll();
+    LiveData<List<Objetive>> getAll();
 
     @Query("SELECT * FROM objetives WHERE name = :name LIMIT 1")
     Objetive getByName(String name);

@@ -31,6 +31,44 @@ public class DayRepository {
         new insertAsyncTask(databaseApp).execute(day);
     }
 
+    public void update(Day day) { new updateAsyncTask(databaseApp).execute(day);}
+
+    public void deleteAll() { new deleteAllAsyncTask(databaseApp).execute(); }
+
+    private static class deleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private DatabaseApp db;
+
+        deleteAllAsyncTask(DatabaseApp databaseApp){
+            db = databaseApp;
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            db.dayDao().truncateTable();
+            return null;
+        }
+
+    }
+
+    private static class updateAsyncTask extends AsyncTask<Day, Void, Void> {
+
+        private DatabaseApp db;
+
+        updateAsyncTask(DatabaseApp databaseApp){
+            db = databaseApp;
+        }
+
+
+        @Override
+        protected Void doInBackground(Day... days) {
+            db.dayDao().update(days);
+            return null;
+        }
+
+    }
+
     private static class insertAsyncTask extends AsyncTask<Day, Void, Void> {
 
         private DatabaseApp db;

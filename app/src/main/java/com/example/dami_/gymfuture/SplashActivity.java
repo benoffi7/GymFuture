@@ -1,5 +1,6 @@
 package com.example.dami_.gymfuture;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,11 @@ import com.example.dami_.gymfuture.Model.Exercise;
 import com.example.dami_.gymfuture.Model.ExerciseToDo;
 import com.example.dami_.gymfuture.Model.Objetive;
 import com.example.dami_.gymfuture.Model.Routine;
+import com.example.dami_.gymfuture.ViewModel.DayViewModel;
+import com.example.dami_.gymfuture.ViewModel.ExerciseToDoViewModel;
+import com.example.dami_.gymfuture.ViewModel.ExerciseViewModel;
+import com.example.dami_.gymfuture.ViewModel.ObjetiveViewModel;
+import com.example.dami_.gymfuture.ViewModel.RoutineViewModel;
 import com.example.dami_.gymfuture.app.app;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +34,11 @@ public class SplashActivity extends AppCompatActivity
 {
     public static DatabaseApp databaseApp;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private ObjetiveViewModel objetiveViewModel;
+    private ExerciseViewModel exerciseViewModel;
+    private RoutineViewModel routineViewModel;
+    private DayViewModel dayViewModel;
+    private ExerciseToDoViewModel exerciseToDoViewModel;
 
     int contador = 0;
 
@@ -36,9 +47,19 @@ public class SplashActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         database.setPersistenceEnabled(true);
-
         databaseApp = app.getDatabaseBuilder(this);
+
+        objetiveViewModel = ViewModelProviders.of(this).get(ObjetiveViewModel.class);
+        exerciseViewModel = ViewModelProviders.of(this).get(ExerciseViewModel.class);
+        routineViewModel = ViewModelProviders.of(this).get(RoutineViewModel.class);
+        dayViewModel = ViewModelProviders.of(this).get(DayViewModel.class);
+        exerciseToDoViewModel = ViewModelProviders.of(this).get(ExerciseToDoViewModel.class);
+
         load();
+
+        Intent intent = new Intent(this,SelectObjetiveActivity.class );
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     public void load(){
@@ -51,38 +72,20 @@ public class SplashActivity extends AppCompatActivity
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        databaseApp.exerciseDao().truncateTable();
-                        final int cantidad =  (int) dataSnapshot.getChildrenCount();
-                        for (DataSnapshot node : dataSnapshot.getChildren())
-                        {
-                            String key = node.getKey();
-                            String name = (String) node.child("name").getValue();
-                            String description = (String) node.child("description").getValue();
-                            String url_image = (String) node.child("url_image").getValue();
-                            assert key != null;
-                            final Exercise exercise = new Exercise(key, name, description,url_image);
-                            exercise.setIdExercise(key);
-                            new Thread(new Runnable()
-                            {
-                                @Override
-                                public void run() {
+                exerciseViewModel.deleteAll();
 
-                                        databaseApp.exerciseDao().insert(exercise);
-                                        contador++;
-                                        if (contador == cantidad)
-                                        {
-                                            contador=0;
-                                            loadObjetives();
-                                        }
+                for (DataSnapshot node : dataSnapshot.getChildren())
+                {
+                    String key = node.getKey();
+                    String name = (String) node.child("name").getValue();
+                    String description = (String) node.child("description").getValue();
+                    String url_image = (String) node.child("url_image").getValue();
+                    assert key != null;
+                    final Exercise exercise = new Exercise(key, name, description,url_image);
+                    exerciseViewModel.insert(exercise);
+                }
+                loadObjetives();
 
-                                }
-                            }).start();
-                        }
-                    }
-                }).start();
             }
 
             @Override
@@ -91,48 +94,34 @@ public class SplashActivity extends AppCompatActivity
             }
         });
     }
+
     public void loadObjetives(){
         //OBTENGO REFERENCIA
         DatabaseReference myRef = database.getReference().child("objetives");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        databaseApp.objetiveDao().truncateTable();
-                        final int cantidad =  (int) dataSnapshot.getChildrenCount();
-                        for (DataSnapshot node : dataSnapshot.getChildren())
-                        {
-                            String key = node.getKey();
-                            String name = (String) node.child("name").getValue();
-                            String repetitionsString = (String) node.child("repetitions").getValue();
-                            assert repetitionsString != null;
-                            Byte repetitions = Byte.parseByte(repetitionsString);
-                            String seriesString = (String) node.child("series").getValue();
-                            assert seriesString != null;
-                            Byte series = Byte.parseByte(seriesString);
-                            String breakTime = (String) node.child("breakTime").getValue();
+                objetiveViewModel.deleteAll();
 
-                            assert key != null;
-                            final Objetive objetive = new Objetive(key,breakTime,name,repetitions,series);
+                for (DataSnapshot node : dataSnapshot.getChildren())
+                {
+                    String key = node.getKey();
+                    String name = (String) node.child("name").getValue();
+                    String repetitionsString = (String) node.child("repetitions").getValue();
+                    assert repetitionsString != null;
+                    Byte repetitions = Byte.parseByte(repetitionsString);
+                    String seriesString = (String) node.child("series").getValue();
+                    assert seriesString != null;
+                    Byte series = Byte.parseByte(seriesString);
+                    String breakTime = (String) node.child("breakTime").getValue();
 
-                            new Thread(new Runnable()
-                            {
-                                @Override
-                                public void run() {
-                                        databaseApp.objetiveDao().add(objetive);
-                                        contador++;
-                                        if (contador == cantidad)
-                                        {
-                                            contador=0;
-                                            loadRoutines();
-                                        }
-                                }
-                            }).start();
-                        }
-                    }
-                }).start();
+                    assert key != null;
+                    final Objetive objetive = new Objetive(key,breakTime,name,repetitions,series);
+
+                    objetiveViewModel.insert(objetive);
+                }
+                loadRoutines();
+
             }
 
             @Override
@@ -148,35 +137,19 @@ public class SplashActivity extends AppCompatActivity
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        databaseApp.routineDao().truncateTable();
-                        final int cantidad =  (int) dataSnapshot.getChildrenCount();
-                        for (DataSnapshot node : dataSnapshot.getChildren())
-                        {
-                            String key = node.getKey();
-                            String name = (String) node.child("name").getValue();
-                            String id_objetive = (String) node.child("id_objetive").getValue();
-                            assert key != null;
-                            final Routine routine = new Routine(key, name,id_objetive);
-                            routine.setKey(key);
-                            new Thread(new Runnable()
-                            {
-                                @Override
-                                public void run() {
-                                        databaseApp.routineDao().insert(routine);
-                                        contador++;
-                                        if (contador == cantidad)
-                                        {
-                                            contador=0;
-                                            loadDays();
-                                        }
-                                }
-                            }).start();
-                        }
-                    }
-                }).start();
+                routineViewModel.deleteAll();
+
+                for (DataSnapshot node : dataSnapshot.getChildren())
+                {
+                    String key = node.getKey();
+                    String name = (String) node.child("name").getValue();
+                    String id_objetive = (String) node.child("id_objetive").getValue();
+                    assert key != null;
+                    final Routine routine = new Routine(key, name,id_objetive);
+                    routineViewModel.insert(routine);
+                }
+                loadDays();
+
             }
 
             @Override
@@ -192,37 +165,20 @@ public class SplashActivity extends AppCompatActivity
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        databaseApp.dayDao().truncateTable();
-                        final int cantidad =  (int) dataSnapshot.getChildrenCount();
-                        for (DataSnapshot node : dataSnapshot.getChildren())
-                        {
-                            String key = node.getKey();
-                            long numberLong = (long) node.child("number").getValue();
-                            String numberString = String.valueOf(numberLong);
-                            Byte number = Byte.parseByte(numberString);
-                            String id_routine = (String) node.child("id_routine").getValue();
-                            assert key != null;
-                            final Day day = new Day(key,number,id_routine);
+               dayViewModel.deleteAll();
+                for (DataSnapshot node : dataSnapshot.getChildren())
+                {
+                    String key = node.getKey();
+                    long numberLong = (long) node.child("number").getValue();
+                    String numberString = String.valueOf(numberLong);
+                    Byte number = Byte.parseByte(numberString);
+                    String id_routine = (String) node.child("id_routine").getValue();
+                    assert key != null;
+                    final Day day = new Day(key,number,id_routine);
+                    dayViewModel.insert(day);
+                }
+                loadExercisesToDo();
 
-                            new Thread(new Runnable()
-                            {
-                                @Override
-                                public void run() {
-                                        databaseApp.dayDao().insert(day);
-                                        contador++;
-                                        if (contador == cantidad)
-                                        {
-                                            contador=0;
-                                            loadExercisesToDo();
-                                        }
-                                }
-                            }).start();
-                        }
-                    }
-                }).start();
             }
 
             @Override
@@ -238,50 +194,25 @@ public class SplashActivity extends AppCompatActivity
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        databaseApp.exerciseToDoDao().truncateTable();
-                        final int cantidad =  (int) dataSnapshot.getChildrenCount();
-                        for (DataSnapshot node : dataSnapshot.getChildren())
-                        {
-                            String key = node.getKey();
-                            String id_day = (String) node.child("id_day").getValue();
-                            String id_exercise = (String) node.child("id_exercise").getValue();
-                            boolean hasKilograms = (boolean) node.child("hasKilograms").getValue();
-                            String time = (String) node.child("time").getValue();
-                            assert key != null;
+                exerciseToDoViewModel.deleteAll();
+                for (DataSnapshot node : dataSnapshot.getChildren())
+                {
+                    String key = node.getKey();
+                    String id_day = (String) node.child("id_day").getValue();
+                    String id_exercise = (String) node.child("id_exercise").getValue();
+                    boolean hasKilograms = (boolean) node.child("hasKilograms").getValue();
+                    String time = (String) node.child("time").getValue();
+                    assert key != null;
 
-                            final ExerciseToDo exerciseToDo = new ExerciseToDo(key,id_day,
-                                    id_exercise,hasKilograms,time);
+                    ExerciseToDo exerciseToDo = new ExerciseToDo(key,id_day,
+                            id_exercise,hasKilograms,time);
 
-                            new Thread(new Runnable()
-                            {
-                                @Override
-                                public void run() {
-                                        databaseApp.exerciseToDoDao().add(exerciseToDo);
-                                        contador++;
-                                        if (contador == cantidad)
-                                        {
-                                            contador=0;
+                    exerciseToDoViewModel.insert(exerciseToDo);
+                }
 
-                                            //HACER UN IF PARA VERIFICAR SI EL USUARIO YA TIENE UN OBJETIVO O NO
 
-                                            //IF NO_EXISTE_OBJETIVO
-
-                                                Intent intent = new Intent(SplashActivity.this,SelectObjetiveActivity.class );
-                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(intent);
-
-                                             //ELSE
-                                                //INTENT intent = new Intent() --> mandar la MainActivity
-                                        }
-                                }
-                            }).start();
-                        }
-                    }
-                }).start();
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

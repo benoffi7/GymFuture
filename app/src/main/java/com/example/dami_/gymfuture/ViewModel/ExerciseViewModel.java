@@ -28,6 +28,8 @@ public class ExerciseViewModel extends AndroidViewModel {
         repository.delete(exercise);
     }
 
+    public void deleteAll(){ repository.deleteAll(); }
+
     public LiveData<List<Exercise>> getAll(){
         return list;
     }
