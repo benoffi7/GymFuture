@@ -1,5 +1,6 @@
 package com.example.dami_.gymfuture.Interfaces;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -20,11 +21,11 @@ public interface RoutineDao {
     void update(Routine... routines);
 
     @Insert
-    void addRoutine(Routine... routines);
+    void insert(Routine... routines);
 
     @Query("DELETE FROM routines")
     void truncateTable();
 
     @Query("SELECT * FROM routines")
-    List<Routine> getAll();
+    LiveData<List<Routine>> getAll();
 }

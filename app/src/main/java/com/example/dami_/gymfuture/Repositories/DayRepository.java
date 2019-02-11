@@ -1,0 +1,65 @@
+package com.example.dami_.gymfuture.Repositories;
+
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
+import android.os.AsyncTask;
+
+import com.example.dami_.gymfuture.Database.DatabaseApp;
+import com.example.dami_.gymfuture.Model.Day;
+
+import java.util.List;
+
+public class DayRepository {
+    private final LiveData<List<Day>> list;
+    private DatabaseApp databaseApp;
+
+    public DayRepository(Application application){
+        this.databaseApp = DatabaseApp.getDatabase(application);
+        this.list = databaseApp.dayDao().getAll();
+    }
+
+    public LiveData<List<Day>> getList() {
+        return list;
+    }
+
+    public void delete(Day day){
+        new deleteAsyncTask(databaseApp).execute(day);
+    }
+
+    public void insert(Day day){
+        new insertAsyncTask(databaseApp).execute(day);
+    }
+
+    private static class insertAsyncTask extends AsyncTask<Day, Void, Void> {
+
+        private DatabaseApp db;
+
+        insertAsyncTask(DatabaseApp databaseApp){
+            db = databaseApp;
+        }
+
+
+        @Override
+        protected Void doInBackground(Day... days) {
+            db.dayDao().insert(days);
+            return null;
+        }
+
+    }
+    private static class deleteAsyncTask extends AsyncTask<Day, Void, Void> {
+
+        private DatabaseApp db;
+
+        deleteAsyncTask(DatabaseApp databaseApp) {
+            db = databaseApp;
+        }
+
+        @Override
+        protected Void doInBackground(final Day... params) {
+            db.dayDao().delete(params[0]);
+            return null;
+        }
+
+    }
+}

@@ -13,7 +13,7 @@ import java.util.List;
 @Dao
 public interface ExerciseDao {
     @Insert
-    void addExercise(Exercise exercise);
+    void insert(Exercise... exercises);
 
     @Query("SELECT * FROM exercises")
     LiveData<List<Exercise>> getAll();

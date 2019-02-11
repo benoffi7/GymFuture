@@ -1,9 +1,12 @@
 package com.example.dami_.gymfuture.Database;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
+import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import com.example.dami_.gymfuture.Interfaces.DayDao;
 import com.example.dami_.gymfuture.Interfaces.ExerciseDao;
@@ -28,12 +31,36 @@ public abstract class DatabaseApp extends RoomDatabase {
     public abstract DayDao dayDao();
     public abstract ExerciseToDoDao exerciseToDoDao();
 
-    public static DatabaseApp getDatabase(Context context){
+    public static synchronized DatabaseApp getDatabase(Context context){
         if (INSTANCE == null) {
-            INSTANCE =
-                    Room.databaseBuilder(context.getApplicationContext(), DatabaseApp.class, "gym_future_db")
-                            .build();
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                         DatabaseApp.class,
+                        "gym_future_db")
+                    .fallbackToDestructiveMigration()
+                    .addCallback(roomCallback)
+                    .build();
         }
         return INSTANCE;
+    }
+
+    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback(){
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            new PopulateDbAsyncTask(INSTANCE).execute();
+        }
+    };
+
+    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
+        private ExerciseDao exerciseDao;
+
+        private PopulateDbAsyncTask(DatabaseApp databaseApp){
+            exerciseDao = databaseApp.exerciseDao();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
     }
 }

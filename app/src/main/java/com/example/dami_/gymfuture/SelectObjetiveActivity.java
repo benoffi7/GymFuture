@@ -1,7 +1,10 @@
 package com.example.dami_.gymfuture;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 import com.example.dami_.gymfuture.Database.DatabaseApp;
 import com.example.dami_.gymfuture.Model.Objetive;
 import com.example.dami_.gymfuture.Model.Routine;
+import com.example.dami_.gymfuture.ViewModel.RoutineViewModel;
 import com.example.dami_.gymfuture.app.app;
 
 import java.util.List;
@@ -22,6 +26,7 @@ public class SelectObjetiveActivity extends AppCompatActivity {
     //public RoutinesAdapter adapter;
     private RadioGroup radioGroup;
     public List<Objetive> listObjetives;
+    private RoutineViewModel routineListViewModel;
     public List<Routine> listRoutines;
 
     @Override
@@ -39,7 +44,13 @@ public class SelectObjetiveActivity extends AppCompatActivity {
                 try
                 {
                     SelectObjetiveActivity.this.listObjetives = databaseApp.objetiveDao().getAll();
-                    SelectObjetiveActivity.this.listRoutines = databaseApp.routineDao().getAll();
+                    routineListViewModel = ViewModelProviders.of(SelectObjetiveActivity.this).get(RoutineViewModel.class);
+                    routineListViewModel.getAll().observe(SelectObjetiveActivity.this, new Observer<List<Routine>>() {
+                        @Override
+                        public void onChanged(@Nullable List<Routine> routines) {
+                            listRoutines = routines;
+                        }
+                    });
                     setRadioButtons();
                     //MainActivity.this.setRoutinesAdapter();
                 }

@@ -70,7 +70,7 @@ public class SplashActivity extends AppCompatActivity
                                 @Override
                                 public void run() {
 
-                                        databaseApp.exerciseDao().addExercise(exercise);
+                                        databaseApp.exerciseDao().insert(exercise);
                                         contador++;
                                         if (contador == cantidad)
                                         {
@@ -165,7 +165,7 @@ public class SplashActivity extends AppCompatActivity
                             {
                                 @Override
                                 public void run() {
-                                        databaseApp.routineDao().addRoutine(routine);
+                                        databaseApp.routineDao().insert(routine);
                                         contador++;
                                         if (contador == cantidad)
                                         {
@@ -211,7 +211,7 @@ public class SplashActivity extends AppCompatActivity
                             {
                                 @Override
                                 public void run() {
-                                        databaseApp.dayDao().add(day);
+                                        databaseApp.dayDao().insert(day);
                                         contador++;
                                         if (contador == cantidad)
                                         {

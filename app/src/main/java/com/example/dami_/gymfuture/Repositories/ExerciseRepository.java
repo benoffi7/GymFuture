@@ -1,4 +1,4 @@
-package com.example.dami_.gymfuture.ViewModel;
+package com.example.dami_.gymfuture.Repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -10,13 +10,12 @@ import com.example.dami_.gymfuture.Model.Exercise;
 
 import java.util.List;
 
-public class ExerciseListViewModel extends AndroidViewModel {
+public class ExerciseRepository {
     private final LiveData<List<Exercise>> listExercises;
     private DatabaseApp databaseApp;
 
-    public ExerciseListViewModel(Application application){
-        super(application);
-        databaseApp = DatabaseApp.getDatabase(this.getApplication());
+    public ExerciseRepository(Application application){
+        databaseApp = DatabaseApp.getDatabase(application);
         listExercises = databaseApp.exerciseDao().getAll();
 
     }
@@ -29,6 +28,26 @@ public class ExerciseListViewModel extends AndroidViewModel {
         new deleteAsyncTask(databaseApp).execute(exercise);
     }
 
+    public void insert(Exercise exercise){
+        new insertAsyncTask(databaseApp).execute(exercise);
+    }
+
+    private static class insertAsyncTask extends  AsyncTask<Exercise, Void, Void>{
+
+        private DatabaseApp db;
+
+        insertAsyncTask(DatabaseApp databaseApp){
+            db = databaseApp;
+        }
+
+
+        @Override
+        protected Void doInBackground(Exercise... exercises) {
+            db.exerciseDao().insert(exercises);
+            return null;
+        }
+
+    }
     private static class deleteAsyncTask extends AsyncTask<Exercise, Void, Void> {
 
         private DatabaseApp db;

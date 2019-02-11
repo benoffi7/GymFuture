@@ -1,5 +1,6 @@
 package com.example.dami_.gymfuture.Interfaces;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -13,13 +14,13 @@ import java.util.List;
 @Dao
 public interface DayDao {
     @Insert
-    void add(Day... days);
+    void insert(Day... days);
     @Delete
     void delete(Day... days);
     @Update
     void update(Day... days);
     @Query("SELECT * FROM days")
-    List<Day> getAll();
+    LiveData<List<Day>> getAll();
     @Query("DELETE FROM days")
     void truncateTable();
 }
