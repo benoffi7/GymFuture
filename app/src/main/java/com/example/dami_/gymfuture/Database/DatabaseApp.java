@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
+import com.example.dami_.gymfuture.Interfaces.CategoryDao;
 import com.example.dami_.gymfuture.Interfaces.DayDao;
 import com.example.dami_.gymfuture.Interfaces.ExerciseDao;
 import com.example.dami_.gymfuture.Interfaces.ExerciseToDoDao;
@@ -30,6 +31,7 @@ public abstract class DatabaseApp extends RoomDatabase {
     public abstract ObjetiveDao objetiveDao();
     public abstract DayDao dayDao();
     public abstract ExerciseToDoDao exerciseToDoDao();
+    public abstract CategoryDao categoryDao();
 
     public static synchronized DatabaseApp getDatabase(Context context){
         if (INSTANCE == null) {

@@ -6,41 +6,39 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.dami_.gymfuture.Database.DatabaseApp;
+import com.example.dami_.gymfuture.Model.Category;
 import com.example.dami_.gymfuture.Model.Day;
 import com.example.dami_.gymfuture.Model.Exercise;
 import com.example.dami_.gymfuture.Model.ExerciseToDo;
 import com.example.dami_.gymfuture.Model.Objetive;
 import com.example.dami_.gymfuture.Model.Routine;
+import com.example.dami_.gymfuture.ViewModel.CategoryViewModel;
 import com.example.dami_.gymfuture.ViewModel.DayViewModel;
 import com.example.dami_.gymfuture.ViewModel.ExerciseToDoViewModel;
 import com.example.dami_.gymfuture.ViewModel.ExerciseViewModel;
 import com.example.dami_.gymfuture.ViewModel.ObjetiveViewModel;
 import com.example.dami_.gymfuture.ViewModel.RoutineViewModel;
 import com.example.dami_.gymfuture.app.app;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
-
 public class SplashActivity extends AppCompatActivity
 {
     public static DatabaseApp databaseApp;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
     private ObjetiveViewModel objetiveViewModel;
     private ExerciseViewModel exerciseViewModel;
     private RoutineViewModel routineViewModel;
     private DayViewModel dayViewModel;
     private ExerciseToDoViewModel exerciseToDoViewModel;
+    private CategoryViewModel categoryViewModel;
 
-    int contador = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +52,7 @@ public class SplashActivity extends AppCompatActivity
         routineViewModel = ViewModelProviders.of(this).get(RoutineViewModel.class);
         dayViewModel = ViewModelProviders.of(this).get(DayViewModel.class);
         exerciseToDoViewModel = ViewModelProviders.of(this).get(ExerciseToDoViewModel.class);
+        categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
         load();
 
@@ -63,9 +62,35 @@ public class SplashActivity extends AppCompatActivity
     }
 
     public void load(){
-        loadExercises();
+        loadCategories();
     }
 
+    private void loadCategories(){
+        DatabaseReference myRef = database.getReference().child("category");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                categoryViewModel.deleteAll();
+
+                for (DataSnapshot node : dataSnapshot.getChildren())
+                {
+                    String key = node.getKey();
+                    String name = (String) node.child("name").getValue();
+                    String url_image = (String) node.child("url_image").getValue();
+                    assert key != null;
+                    final Category category = new Category(key, name ,url_image);
+                    categoryViewModel.insert(category);
+                }
+                loadExercises();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
     public void loadExercises(){
         //OBTENGO REFERENCIA
         DatabaseReference myRef = database.getReference().child("exercises");
@@ -143,9 +168,11 @@ public class SplashActivity extends AppCompatActivity
                 {
                     String key = node.getKey();
                     String name = (String) node.child("name").getValue();
+                    String id_category = (String) node.child("id_category").getValue();
+                    String url_image = (String) node.child("url_image").getValue();
                     String id_objetive = (String) node.child("id_objetive").getValue();
                     assert key != null;
-                    final Routine routine = new Routine(key, name,id_objetive);
+                    final Routine routine = new Routine(key,name,id_category,url_image,id_objetive);
                     routineViewModel.insert(routine);
                 }
                 loadDays();
