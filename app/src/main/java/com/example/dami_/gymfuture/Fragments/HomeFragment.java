@@ -39,7 +39,7 @@ public class HomeFragment extends Fragment implements ExercisesAdapter.ItemClick
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setExerciseAdapter(view);
+        //setExerciseAdapter(view);
         exerciseListViewModel = ViewModelProviders.of(getActivity()).get(ExerciseViewModel.class);
 
         exerciseListViewModel.getAll().observe(HomeFragment.this, new Observer<List<Exercise>>() {
@@ -50,14 +50,14 @@ public class HomeFragment extends Fragment implements ExercisesAdapter.ItemClick
         });
     }
 
-    public void setExerciseAdapter(View view){
+    /*public void setExerciseAdapter(View view){
         // set up the RecyclerView
-       RecyclerView recyclerView = view.findViewById(R.id.rv_exercise);
+         RecyclerView recyclerView = view.findViewById(R.id.rv_exercise);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ExercisesAdapter(getContext(), new ArrayList<Exercise>());
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
-    }
+    }*/
 
 
 

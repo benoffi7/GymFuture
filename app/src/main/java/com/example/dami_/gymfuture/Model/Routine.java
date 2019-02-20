@@ -3,6 +3,7 @@ package com.example.dami_.gymfuture.Model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -28,6 +29,15 @@ public class Routine {
     private String id_objetive;
 
 
+    public Routine(@NonNull String key, String name, String id_category, String url_image) {
+        this.key = key;
+        this.name = name;
+        this.id_category = id_category;
+        this.url_image = url_image;
+        this.id_objetive = null;
+    }
+
+    @Ignore
     public Routine(@NonNull String key, String name, String id_category, String url_image, String id_objetive) {
         this.key = key;
         this.name = name;

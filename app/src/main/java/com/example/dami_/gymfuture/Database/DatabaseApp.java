@@ -14,14 +14,15 @@ import com.example.dami_.gymfuture.Interfaces.ExerciseDao;
 import com.example.dami_.gymfuture.Interfaces.ExerciseToDoDao;
 import com.example.dami_.gymfuture.Interfaces.ObjetiveDao;
 import com.example.dami_.gymfuture.Interfaces.RoutineDao;
+import com.example.dami_.gymfuture.Model.Category;
 import com.example.dami_.gymfuture.Model.Day;
 import com.example.dami_.gymfuture.Model.Exercise;
 import com.example.dami_.gymfuture.Model.ExerciseToDo;
 import com.example.dami_.gymfuture.Model.Objetive;
 import com.example.dami_.gymfuture.Model.Routine;
 
-@Database(entities = {Exercise.class, Routine.class, Day.class, ExerciseToDo.class, Objetive.class}
-, version = 5 , exportSchema = false)
+@Database(entities = {Exercise.class, Routine.class, Day.class, ExerciseToDo.class, Objetive.class , Category.class}
+, version = 6 , exportSchema = false)
 public abstract class DatabaseApp extends RoomDatabase {
 
     private static DatabaseApp INSTANCE;

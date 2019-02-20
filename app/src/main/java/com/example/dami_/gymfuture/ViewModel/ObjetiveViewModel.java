@@ -36,21 +36,7 @@ public class ObjetiveViewModel extends AndroidViewModel {
         repository.deleteAll();
     }
 
-    public Objetive getByName(String name) {
-        Objetive obj = null;
-        List<Objetive> list = this.list.getValue();
-
-        if(list != null) {
-            for (Objetive objetive : list) {
-                if (objetive.getName().equals(name)) {
-                    obj = objetive;
-                    break;
-                }
-            }
-        }
-
-        return obj;
-    }
+    public Objetive getByName(String name) { return repository.getByName(name); }
 
     public LiveData<List<Objetive>> getAll(){
         return list;

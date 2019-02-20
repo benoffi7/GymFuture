@@ -39,22 +39,13 @@ public class ObjetiveRepository {
         new deleteAllAsyncTask(databaseApp).execute();
     }
 
+    public Objetive getByName(String name){
+        Objetive objetive = null;
+        try{
+            objetive = new getbyNameAsyncTask(databaseApp).execute(name).get();
+        }catch (Exception ignored){}
 
-    private static class getByNameAsyncTask extends AsyncTask<String, Void, Objetive> {
-
-        private DatabaseApp db;
-
-        getByNameAsyncTask(DatabaseApp databaseApp){
-            db = databaseApp;
-        }
-
-
-        @Override
-        protected Objetive doInBackground(String... strings) {
-            db.objetiveDao().getByName(strings[0]);
-            return null;
-        }
-
+        return objetive;
     }
 
     private static class deleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -119,6 +110,21 @@ public class ObjetiveRepository {
         protected Void doInBackground(final Objetive... params) {
             db.objetiveDao().delete(params[0]);
             return null;
+        }
+
+    }
+
+    private static class getbyNameAsyncTask extends AsyncTask<String, Void , Objetive> {
+
+        private DatabaseApp db;
+
+        getbyNameAsyncTask(DatabaseApp databaseApp) {
+            db = databaseApp;
+        }
+
+        @Override
+        protected Objetive doInBackground(final String... strings) {
+           return  db.objetiveDao().getByName(strings[0]);
         }
 
     }
