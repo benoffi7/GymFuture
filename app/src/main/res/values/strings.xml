@@ -9,4 +9,7 @@
     <string name="action_settings">Settings</string>
     <string name="questionObjetive">¿Que buscas?</string>
     <string name="routines">Rutinas</string>
+    <string name="tutorials">Tutoriales</string>
+    <string name="category">Categoria</string>
+    <string name="title_category">Categorias</string>
 </resources>
