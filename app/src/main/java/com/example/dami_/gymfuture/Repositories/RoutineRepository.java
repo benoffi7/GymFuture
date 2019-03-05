@@ -40,6 +40,15 @@ public class RoutineRepository{
         new deleteAllAsyncTask(databaseApp).execute();
     }
 
+    public LiveData<List<Routine>> getByCategory(String id){
+        LiveData<List<Routine>> data = null;
+        try{
+            data = new getByCategoryAsyncTask(databaseApp).execute(id).get();
+        }catch (Exception e){}
+        return data;
+    }
+
+
     private static class insertAsyncTask extends  AsyncTask<Routine, Void, Void>{
 
         private DatabaseApp db;
@@ -100,6 +109,20 @@ public class RoutineRepository{
         protected Void doInBackground(Void... voids) {
             db.routineDao().truncateTable();
             return null;
+        }
+    }
+
+    private static class getByCategoryAsyncTask extends AsyncTask<String, Void, LiveData<List<Routine>>> {
+
+        private DatabaseApp db;
+
+        getByCategoryAsyncTask(DatabaseApp databaseApp) {
+            db = databaseApp;
+        }
+
+        @Override
+        protected LiveData<List<Routine>> doInBackground(String... strings) {
+            return db.routineDao().getByCategory(strings[0]);
         }
 
     }

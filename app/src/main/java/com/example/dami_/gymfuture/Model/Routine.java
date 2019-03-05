@@ -9,10 +9,10 @@ import android.support.annotation.NonNull;
 
 @Entity(tableName = "routines" , foreignKeys = {
         @ForeignKey(entity = Objetive.class, parentColumns = "id_objetive" , childColumns = "id_objetive",
-                onUpdate = ForeignKey.SET_DEFAULT , onDelete = ForeignKey.SET_NULL
+                onUpdate = ForeignKey.SET_DEFAULT , onDelete = ForeignKey.CASCADE
         ),
         @ForeignKey(entity = Category.class, parentColumns = "id_category" , childColumns = "id_category",
-                onUpdate = ForeignKey.SET_DEFAULT , onDelete = ForeignKey.SET_NULL
+                onUpdate = ForeignKey.SET_DEFAULT , onDelete = ForeignKey.CASCADE
         )
 })
 public class Routine {

@@ -4,50 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#202020"
+    android:background="@android:color/background_dark"
     android:orientation="vertical"
     tools:context=".SelectObjetiveActivity">
 
-    <LinearLayout
-        android:layout_width="333dp"
-        android:layout_height="364dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="50sp"
-        android:background="@color/design_default_color_primary"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
         android:gravity="center"
+        android:padding="5dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/objetive_title"
+        android:textSize="20dp"
+        android:textColor="@android:color/background_light"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_objetives"
         android:orientation="vertical"
-        android:padding="15dp">
-
-        <TextView
-            android:id="@+id/txt_questionMain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/questionObjetive"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
-            android:textSize="50sp" />
-
-        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/main_radio_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:orientation="vertical">
-
-
-        </RadioGroup>
-
-        <Button
-            android:id="@+id/btn_confirm_objetive"
-            android:layout_marginTop="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/common_google_signin_btn_text_light_default"
-            android:textColor="@color/common_google_signin_btn_text_dark_pressed"
-            android:gravity="center"
-            android:text="ELEGIR" />
-    </LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

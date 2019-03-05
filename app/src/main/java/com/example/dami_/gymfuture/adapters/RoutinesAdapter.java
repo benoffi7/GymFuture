@@ -6,8 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.dami_.gymfuture.Model.Routine;
 import com.example.dami_.gymfuture.R;
 
@@ -18,11 +21,13 @@ public class RoutinesAdapter extends RecyclerView.Adapter<RoutinesAdapter.ViewHo
     private List<Routine> mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+    private Context context;
 
     // data is passed into the constructor
     public RoutinesAdapter(Context context, List<Routine> data) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        this.context = context;
     }
 
     // inflates the row layout from xml when needed
@@ -36,7 +41,7 @@ public class RoutinesAdapter extends RecyclerView.Adapter<RoutinesAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Routine routine = mData.get(position);
-        holder.myTextView.setText(routine.getName());
+        Glide.with(context).load(routine.getUrl_image()).into(holder.imgRoutine);
     }
 
     // total number of rows
@@ -45,21 +50,9 @@ public class RoutinesAdapter extends RecyclerView.Adapter<RoutinesAdapter.ViewHo
         return mData.size();
     }
 
-
-    // stores and recycles views as they are scrolled off screen
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView myTextView;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-            myTextView = itemView.findViewById(R.id.row_routine_name);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-        }
+    public void addItems(List<Routine> routines){
+        this.mData = routines;
+        notifyDataSetChanged();
     }
 
     // convenience method for getting data at click position
@@ -76,4 +69,33 @@ public class RoutinesAdapter extends RecyclerView.Adapter<RoutinesAdapter.ViewHo
     public interface ItemClickListener {
         void onItemClick(View view, int position);
     }
+
+
+    // stores and recycles views as they are scrolled off screen
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        ImageView imgRoutine;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            imgRoutine = itemView.findViewById(R.id.img_routine);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+        }
+    }
+
+    public class LoadingViewHolder extends RecyclerView.ViewHolder{
+        public ProgressBar progressBar;
+
+        public LoadingViewHolder(@NonNull View itemView) {
+            super(itemView);
+            this.progressBar = (ProgressBar) itemView.findViewById(R.id.progress_loading);
+        }
+    }
+
+
+
 }

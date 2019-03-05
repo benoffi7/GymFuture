@@ -12,4 +12,6 @@
     <string name="tutorials">Tutoriales</string>
     <string name="category">Categoria</string>
     <string name="title_category">Categorias</string>
+    <string name="objetive_title">Primero, debes elegir tu objetivo</string>
+    <string name="title_routines">Rutinas</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.dami_.gymfuture.Interfaces;
+package com.example.dami_.gymfuture.Dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;

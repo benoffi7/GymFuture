@@ -13,13 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.RoutinesActivity"
-            android:parentActivityName=".MainActivity"></activity>
+        <activity android:name=".Activities.RoutineActivity"
+                android:parentActivityName=".Activities.CategoriesActivity"
+            ></activity>
+        <activity
+            android:name=".Activities.CategoriesActivity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SelectObjetiveActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SplashActivity"
+            android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

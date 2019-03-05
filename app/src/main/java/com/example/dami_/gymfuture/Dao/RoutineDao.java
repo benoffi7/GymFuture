@@ -1,4 +1,4 @@
-package com.example.dami_.gymfuture.Interfaces;
+package com.example.dami_.gymfuture.Dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -28,4 +28,7 @@ public interface RoutineDao {
 
     @Query("SELECT * FROM routines")
     LiveData<List<Routine>> getAll();
+
+    @Query("SELECT * FROM routines WHERE id_category = :id_category")
+    LiveData<List<Routine>> getByCategory(String id_category);
 }

@@ -48,6 +48,16 @@ public class ObjetiveRepository {
         return objetive;
     }
 
+    public Objetive getById(String id){
+        Objetive objetive = null;
+        try{
+            objetive = new getbyIdAsyncTask(databaseApp).execute(id).get();
+        }catch (Exception ignored){}
+
+        return objetive;
+    }
+
+
     private static class deleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private DatabaseApp db;
@@ -125,6 +135,21 @@ public class ObjetiveRepository {
         @Override
         protected Objetive doInBackground(final String... strings) {
            return  db.objetiveDao().getByName(strings[0]);
+        }
+
+    }
+
+    private static class getbyIdAsyncTask extends AsyncTask<String, Void , Objetive> {
+
+        private DatabaseApp db;
+
+        getbyIdAsyncTask(DatabaseApp databaseApp) {
+            db = databaseApp;
+        }
+
+        @Override
+        protected Objetive doInBackground(final String... strings) {
+            return  db.objetiveDao().getById(strings[0]);
         }
 
     }

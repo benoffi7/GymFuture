@@ -38,6 +38,7 @@ public class ObjetiveViewModel extends AndroidViewModel {
 
     public Objetive getByName(String name) { return repository.getByName(name); }
 
+    public Objetive getById(String id) { return  repository.getById(id); }
     public LiveData<List<Objetive>> getAll(){
         return list;
     }

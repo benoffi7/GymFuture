@@ -18,15 +18,18 @@ public class Objetive {
     private Byte repetitions;
     @ColumnInfo(name = "series")
     private Byte series;
+    @ColumnInfo(name = "url_image")
+    private String url_image;
 
-    public Objetive(@NonNull String key, String breakTime, String name, Byte repetitions, Byte series) {
+    public Objetive(@NonNull String key, String breakTime, String name, Byte repetitions,
+                    Byte series, String url_image) {
         this.key = key;
         this.breakTime = breakTime;
         this.name = name;
         this.repetitions = repetitions;
         this.series = series;
+        this.url_image = url_image;
     }
-
 
     @NonNull
     public String getKey() {
@@ -67,5 +70,13 @@ public class Objetive {
 
     public void setSeries(Byte series) {
         this.series = series;
+    }
+
+    public String getUrl_image() {
+        return url_image;
+    }
+
+    public void setUrl_image(String url_image) {
+        this.url_image = url_image;
     }
 }

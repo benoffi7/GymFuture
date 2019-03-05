@@ -1,5 +1,6 @@
 package com.example.dami_.gymfuture;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,12 +14,14 @@ import com.example.dami_.gymfuture.Model.Exercise;
 import com.example.dami_.gymfuture.Model.ExerciseToDo;
 import com.example.dami_.gymfuture.Model.Objetive;
 import com.example.dami_.gymfuture.Model.Routine;
+import com.example.dami_.gymfuture.Model.UserObjetive;
 import com.example.dami_.gymfuture.ViewModel.CategoryViewModel;
 import com.example.dami_.gymfuture.ViewModel.DayViewModel;
 import com.example.dami_.gymfuture.ViewModel.ExerciseToDoViewModel;
 import com.example.dami_.gymfuture.ViewModel.ExerciseViewModel;
 import com.example.dami_.gymfuture.ViewModel.ObjetiveViewModel;
 import com.example.dami_.gymfuture.ViewModel.RoutineViewModel;
+import com.example.dami_.gymfuture.ViewModel.UserObjetiveViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -27,24 +30,28 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class SplashActivity extends AppCompatActivity
 {
     private final FirebaseFirestore DB_FIRESTORE = FirebaseFirestore.getInstance();
 
+    private UserObjetive userObjetive;
     private ObjetiveViewModel objetiveViewModel;
     private ExerciseViewModel exerciseViewModel;
     private RoutineViewModel routineViewModel;
     private DayViewModel dayViewModel;
     private ExerciseToDoViewModel exerciseToDoViewModel;
     private CategoryViewModel categoryViewModel;
-
+    private UserObjetiveViewModel userObjetiveViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
 
         objetiveViewModel = ViewModelProviders.of(this).get(ObjetiveViewModel.class);
         exerciseViewModel = ViewModelProviders.of(this).get(ExerciseViewModel.class);
@@ -52,14 +59,45 @@ public class SplashActivity extends AppCompatActivity
         dayViewModel = ViewModelProviders.of(this).get(DayViewModel.class);
         exerciseToDoViewModel = ViewModelProviders.of(this).get(ExerciseToDoViewModel.class);
         categoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+        userObjetiveViewModel = ViewModelProviders.of(this).get(UserObjetiveViewModel.class);
+
+        userObjetiveViewModel.get().observe(this, new Observer<UserObjetive>() {
+            @Override
+            public void onChanged(@Nullable UserObjetive uo) {
+                userObjetive = uo;
+
+            }
+        });
 
         load();
 
-        Intent intent = new Intent(this,SelectObjetiveActivity.class );
+    }
+
+    public void startMainActivity(){
+        Intent intent = new Intent(this,MainActivity.class );
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
+    public void startSelectObjetiveActiviry(){
+        Intent intent = new Intent(this,SelectObjetiveActivity.class );
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
+    }
+    public boolean hasUserObjetive(){
+        boolean flag = false;
+        if(userObjetive != null){
+            if(userObjetive.getId_objetive() != null){
+                flag = true;
+            }
+        }else{
+
+            userObjetiveViewModel.insert(new UserObjetive());
+        }
+        return flag;
+
+    }
     public void load(){
         loadCategories();
     }
@@ -110,6 +148,13 @@ public class SplashActivity extends AppCompatActivity
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
+
+                    String idUserObjetive = null;
+                    if(userObjetive != null){
+                        if(userObjetive.getId_objetive() != null)
+                            idUserObjetive = userObjetive.getId_objetive();
+                    }
+
                     objetiveViewModel.deleteAll();
                     for(QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())){
                         String id = document.getId();
@@ -119,9 +164,19 @@ public class SplashActivity extends AppCompatActivity
                         String repetitions = (String) document.getData().get("repetitions");
                         assert repetitions != null;
                         String breakTime = (String) document.getData().get("breakTime");
+                        String url_image = (String) document.getData().get("url_image");
 
-                        Objetive objetive = new Objetive(id,breakTime,name,Byte.parseByte(repetitions),Byte.parseByte(series));
+                        Objetive objetive = new Objetive(id,breakTime,name,
+                                Byte.parseByte(repetitions),Byte.parseByte(series), url_image);
                         objetiveViewModel.insert(objetive);
+
+                        if(idUserObjetive != null){
+                            if(objetive.getKey().equals(idUserObjetive)){
+                                userObjetive.setId_objetive(objetive.getKey());
+                                userObjetiveViewModel.update(userObjetive);
+                            }
+                        }
+
                     }
                 }
                 loadRoutines();
@@ -159,10 +214,11 @@ public class SplashActivity extends AppCompatActivity
                     dayViewModel.deleteAll();
                     for(QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())){
                         String id = document.getId();
-                        String number = (String) document.getData().get("number");
-                        assert number != null;
+                        long numberLong = (long) document.getData().get("number");
+                        String numberString = String.valueOf(numberLong);
+                        Byte number = Byte.parseByte(numberString);
                         String id_routine = (String) document.getData().get("id_routine");
-                        Day day = new Day(id,Byte.parseByte(number),id_routine);
+                        Day day = new Day(id,number,id_routine);
                         dayViewModel.insert(day);
                     }
                 }
@@ -186,6 +242,13 @@ public class SplashActivity extends AppCompatActivity
                         String time = (String) document.getData().get("time");
                         ExerciseToDo exerciseToDo = new ExerciseToDo(id,id_day,id_exercise,hasKilograms,time);
                         exerciseToDoViewModel.insert(exerciseToDo);
+                    }
+
+                    if(!hasUserObjetive()) {
+                        startSelectObjetiveActiviry();
+                    }
+                    else{
+                        startMainActivity();
                     }
                 }
             }

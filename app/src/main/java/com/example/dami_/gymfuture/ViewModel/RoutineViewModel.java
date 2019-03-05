@@ -40,4 +40,7 @@ public class RoutineViewModel extends AndroidViewModel {
         return list;
     }
 
+    public LiveData<List<Routine>> getByCategory(String id){
+        return repository.getByCategory(id);
+    }
 }

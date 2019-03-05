@@ -8,21 +8,24 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import com.example.dami_.gymfuture.Interfaces.CategoryDao;
-import com.example.dami_.gymfuture.Interfaces.DayDao;
-import com.example.dami_.gymfuture.Interfaces.ExerciseDao;
-import com.example.dami_.gymfuture.Interfaces.ExerciseToDoDao;
-import com.example.dami_.gymfuture.Interfaces.ObjetiveDao;
-import com.example.dami_.gymfuture.Interfaces.RoutineDao;
+import com.example.dami_.gymfuture.Dao.CategoryDao;
+import com.example.dami_.gymfuture.Dao.DayDao;
+import com.example.dami_.gymfuture.Dao.ExerciseDao;
+import com.example.dami_.gymfuture.Dao.ExerciseToDoDao;
+import com.example.dami_.gymfuture.Dao.ObjetiveDao;
+import com.example.dami_.gymfuture.Dao.RoutineDao;
+import com.example.dami_.gymfuture.Dao.UserObjetiveDao;
 import com.example.dami_.gymfuture.Model.Category;
 import com.example.dami_.gymfuture.Model.Day;
 import com.example.dami_.gymfuture.Model.Exercise;
 import com.example.dami_.gymfuture.Model.ExerciseToDo;
 import com.example.dami_.gymfuture.Model.Objetive;
 import com.example.dami_.gymfuture.Model.Routine;
+import com.example.dami_.gymfuture.Model.UserObjetive;
 
-@Database(entities = {Exercise.class, Routine.class, Day.class, ExerciseToDo.class, Objetive.class , Category.class}
-, version = 6 , exportSchema = false)
+@Database(entities = {Exercise.class, Routine.class, Day.class, ExerciseToDo.class, Objetive.class ,
+        Category.class, UserObjetive.class}
+, version = 14 , exportSchema = false)
 public abstract class DatabaseApp extends RoomDatabase {
 
     private static DatabaseApp INSTANCE;
@@ -33,6 +36,7 @@ public abstract class DatabaseApp extends RoomDatabase {
     public abstract DayDao dayDao();
     public abstract ExerciseToDoDao exerciseToDoDao();
     public abstract CategoryDao categoryDao();
+    public abstract UserObjetiveDao userObjetiveDao();
 
     public static synchronized DatabaseApp getDatabase(Context context){
         if (INSTANCE == null) {
@@ -40,7 +44,7 @@ public abstract class DatabaseApp extends RoomDatabase {
                          DatabaseApp.class,
                         "gym_future_db")
                     .fallbackToDestructiveMigration()
-                    .addCallback(roomCallback)
+                   // .addCallback(roomCallback)
                     .build();
         }
         return INSTANCE;
@@ -55,15 +59,17 @@ public abstract class DatabaseApp extends RoomDatabase {
     };
 
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
-        private ExerciseDao exerciseDao;
+        private UserObjetiveDao userObjetiveDao;
 
         private PopulateDbAsyncTask(DatabaseApp databaseApp){
-            exerciseDao = databaseApp.exerciseDao();
+            userObjetiveDao = databaseApp.userObjetiveDao();
         }
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(Void... voids)
+        {
             return null;
+
         }
     }
 }
